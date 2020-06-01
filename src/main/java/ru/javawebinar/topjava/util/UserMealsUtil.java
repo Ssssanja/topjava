@@ -31,29 +31,43 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         List<UserMealWithExcess>result = new ArrayList<>();
         Map<LocalDate, Integer> data = new TreeMap<>();
+        Map<LocalDate, ArrayList<UserMeal>>dataPlusMeals = new TreeMap<>();
         for (UserMeal uM : meals){
             if (!data.containsKey(uM.getDateTime().toLocalDate())){
                 data.put(uM.getDateTime().toLocalDate(), uM.getCalories());
+                if (uM.getDateTime().toLocalTime().isAfter(startTime)&&uM.getDateTime().toLocalTime().isBefore(endTime)) {
+                    dataPlusMeals.put(uM.getDateTime().toLocalDate(), new ArrayList<UserMeal>() {{
+                        add(uM);
+                    }});
+                }
             }
             else {
                 int temporal = data.get(uM.getDateTime().toLocalDate());
                 temporal += uM.getCalories();
                 data.put(uM.getDateTime().toLocalDate(), temporal);
+                if (dataPlusMeals.containsKey(uM.getDateTime().toLocalDate())) {
+                    if (uM.getDateTime().toLocalTime().isAfter(startTime) && uM.getDateTime().toLocalTime().isBefore(endTime)) {
+                        dataPlusMeals.get(uM.getDateTime().toLocalDate()).add(uM);
+                    }
+                }
+                else {
+                    if (uM.getDateTime().toLocalTime().isAfter(startTime) && uM.getDateTime().toLocalTime().isBefore(endTime)) {
+                        dataPlusMeals.put(uM.getDateTime().toLocalDate(), new ArrayList<UserMeal>() {{
+                            add(uM);
+                        }});                    }
+                }
             }
         }
+
         for (Map.Entry<LocalDate, Integer> entry : data.entrySet()){
             if (entry.getValue()<=2000){
-                for (UserMeal uM : meals){
-                    if (uM.getDateTime().toLocalDate().isEqual(entry.getKey())&&uM.getDateTime().toLocalTime().isAfter(startTime)&&uM.getDateTime().toLocalTime().isBefore(endTime)){
-                        result.add(new UserMealWithExcess(uM.getDateTime(), uM.getDescription(), uM.getCalories(), false));
-                    }
+                for (UserMeal u : dataPlusMeals.get(entry.getKey())){
+                    result.add(new UserMealWithExcess(u.getDateTime(), u.getDescription(), u.getCalories(), false));
                 }
             }
             else if (entry.getValue()>2000){
-                for (UserMeal uM : meals){
-                    if (uM.getDateTime().toLocalDate().isEqual(entry.getKey())&&uM.getDateTime().toLocalTime().isAfter(startTime)&&uM.getDateTime().toLocalTime().isBefore(endTime)){
-                        result.add(new UserMealWithExcess(uM.getDateTime(), uM.getDescription(), uM.getCalories(), true));
-                    }
+                for (UserMeal u : dataPlusMeals.get(entry.getKey())){
+                    result.add(new UserMealWithExcess(u.getDateTime(), u.getDescription(), u.getCalories(), true));
                 }
             }
         }
