@@ -7,10 +7,16 @@
 <head>
     <title>Meals</title>
 </head>
-<body style="background-color: lightgray">
+<link href="MealsPageStyle.css" text="text/css" rel="stylesheet">
+<body style="background-color: rgba(154,183,255,0.4)">
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<table border="1" style="background-color: lightcyan">
+<table border="1" style="background-color: lightgray">
+    <tr style="solid-color: black">
+        <td>Description</td>
+        <td>Calories</td>
+        <td>Date/time</td>
+    </tr>
     <c:forEach items="${listOfMeals}" var="mealTo">
         <tr style="color: ${mealTo.excess ? 'green' : 'red'}">
             <td>${mealTo.description}</td>
