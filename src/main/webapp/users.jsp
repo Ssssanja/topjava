@@ -3,7 +3,7 @@
 <head>
     <title>Users</title>
 </head>
-<body>
+<body style="background-color: lightgray">
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Users</h2>
