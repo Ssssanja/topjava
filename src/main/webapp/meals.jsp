@@ -11,14 +11,14 @@
 <body style="background-color: rgba(154,183,255,0.4)">
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<table border="1" style="background-color: lightgray">
-    <tr style="solid-color: black">
+<table>
+    <tr>
         <td>Description</td>
         <td>Calories</td>
         <td>Date/time</td>
     </tr>
     <c:forEach items="${listOfMeals}" var="mealTo">
-        <tr style="color: ${mealTo.excess ? 'green' : 'red'}">
+        <tr style="color: ${mealTo.excess ? 'red' : 'green'}">
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>
             <td>${mealTo.dateTime.format( DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</td>
