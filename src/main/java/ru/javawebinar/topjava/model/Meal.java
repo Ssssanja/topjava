@@ -1,12 +1,26 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.util.CollectionUtils;
+
+import javax.persistence.*;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+@NamedQueries({
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userID ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m where m.id=:id AND m.user.id=:userID"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m " + "WHERE m.user.id=:userID AND m.dateTime >= :startDateTime AND m.dateTime < :endDateTime ORDER BY m.dateTime DESC ")
+})
 
+@Entity
+@Table(name = "meals")
 public class Meal extends AbstractBaseEntity {
+        public static final String ALL_SORTED = "Meal.getALL";
+        public static final String DELETE = "Meal.delete";
+        public static final String GET_BETWEEN = "Meal.getBetween";
     private LocalDateTime dateTime;
 
     private String description;
